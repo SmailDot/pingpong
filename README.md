@@ -7,7 +7,7 @@
 
 > **t = (y_target - y_ball) / v_y**
 
-* **y_target**: 目標高度 (1P 玩家為 420，2P 玩家為 80)
+* **y_target**: 目標高度 (1P 玩家為 420，2P 玩家為 70)
 * **y_ball**: 當前球體的 Y 座標
 * **v_y**: 球體的垂直速度
 
@@ -43,7 +43,15 @@
 * **隱藏層 2 (Hidden Layer 2)**: 32 個神經元
 * **輸出層 (Output Layer)**: 1 個節點
     * 預測目標：落點 X 座標
-<img width="1200" height="1200" alt="Code_Generated_Image (1)" src="https://github.com/user-attachments/assets/8894a6a0-5b7d-4d6f-9b98-22efaad224e8" />
+<img width="1200" height="1200" alt="image" src="https://github.com/user-attachments/assets/402b70c5-7ecd-4857-af0e-abcbde62d2ad" />
+
+### 1.1 訓練資料集
+
+<img width="1511" height="984" alt="image" src="https://github.com/user-attachments/assets/9ca68b0b-329d-4f85-8e9a-465b600c1158" />
+
+- ### 訓練資料集用359個.pickle檔案作為訓練資料用359個.pickle檔案作為訓練資料
+
+
 
 ### 2. 資料前處理 (Normalization)
 
@@ -95,4 +103,54 @@
 > **註**：速度除以 50 是為了將數值控制在 -1 到 1 之間，避免數值過小導致學習困難。
 
 ### 6. Loss Function
-<img width="1000" height="600" alt="Code_Generated_Image" src="https://github.com/user-attachments/assets/776ff6b0-cfd4-4e66-82f5-b512e518cb14" />
+
+## 1. 損失函數：均方誤差 (MSE)
+
+我們使用 MSE 來計算模型預測的落點與真實落點之間的差距。
+
+### 🧮 數學公式
+$$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+### 📝 符號說明 (Symbol Legend)
+
+| 符號 (Symbol) | 意義 (Meaning) | 在本專案中的對應 |
+| :--- | :--- | :--- |
+| **$MSE$** | **均方誤差** (Mean Squared Error) | 最終算出來的「錯誤分數」，越接近 0 代表模型越準。 |
+| **$n$** | **樣本總數** (Batch Size) | 每一批次訓練的資料筆數 (例如 `64` 筆)。 |
+| **$\sum$** | **總和符號** (Summation) | 代表把這一批次裡所有資料的誤差加總起來。 |
+| **$i$** | **索引** (Index) | 代表第幾筆資料 (從第 1 筆算到第 n 筆)。 |
+| **$y_i$** | **真實值** (Ground Truth) | 實際上球最後掉落的 X 座標 (Label)。 |
+| **$\hat{y}_i$** | **預測值** (Predicted Value) | AI 模型猜測球會掉在哪個 X 座標。 |
+| **$(...)^2$** | **平方** (Square) | 將誤差平方，用來消除負號並**懲罰較大的失誤**。 |
+
+
+<img width="1000" height="600" alt="image" src="https://github.com/user-attachments/assets/8b889c0f-aeda-45dd-9eeb-47c5fee20b15" />
+
+- ### 以上的圖可以確定到第50步的時候損失達到0.000066
+
+# 測試方式
+## 確認模型正確,本組採用(演算法vs模型)對打五局)
+
+
+- ### (1p(模型) vs 2p(物理公式暴力解)
+[https://wwwyoutube.com/watch?v=1HdwYs-FdP0](https://youtu.be/7BVF2nzztVY)
+| 場次 (Game) | 原檔標籤 | 時間 (Time) | 最終比分 | 結果 | 備註 |
+| :---: | :---: | :---: | :---: | :---: | :--- |
+| **1** | Step 1 | 16:21 | **5 - 2** | **1P 獲勝** | 本場出現過平手 (Draw) 與 2P 得分 |
+| **2** | Step 2 | 16:22 | **5 - 0** | **1P 獲勝** | 完封 (Perfect Game) |
+| **3** | Step 3 | 16:25 | **5 - 0** | **1P 獲勝** | 完封 (Perfect Game) |
+| **4** | Step 4 (A) | 16:26 | **5 - 0** | **1P 獲勝** | 完封 (Perfect Game) |
+| **5** | Step 4 (B) | 16:28 | **5 - 0** | **1P 獲勝** | 完封 (Perfect Game) |
+
+
+### 1P (物理公式暴力解) vs 2P (模型) 對戰總結表
+
+[https://www.youtube.com/watch?v=_z0315H4C6g](https://youtu.be/YVBCedaBfFg)
+
+| 場次 (Game) | 原檔標籤 | 時間 (Time) | 最終比分 (1P-2P) | 結果 | 備註 |
+| :---: | :---: | :---: | :---: | :---: | :--- |
+| **1** | Step 1 | 16:41 | **1 - 5** | **2P (模型) 獲勝** | 模型開局不穩失 1 分，隨後連勝 |
+| **2** | Step 2 | 16:58 | **4 - 5** | **2P (模型) 獲勝** | **激戰**：出現多次平手 (Draw)，雙方勢均力敵 |
+| **3** | Step 3 | 16:59 | **0 - 5** | **2P (模型) 獲勝** | **完封** (Perfect Game) |
+| **4** | Step 4 | 17:00 | **4 - 5** | **2P (模型) 獲勝** | **激戰**：演算法表現強勢，模型險勝 |
+| **5** | Step 5 | 17:02 | **2 - 5** | **2P (模型) 獲勝** | 演算法取得 2 分，但模型後期回穩 |
