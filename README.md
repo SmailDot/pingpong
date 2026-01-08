@@ -1,3 +1,6 @@
+<img width="1341" height="889" alt="image" src="https://github.com/user-attachments/assets/7f8efe0e-7f33-4688-847a-40d792abadde" />
+
+
 ## 一、數據收集模型 (Data Collection - Physics Expert)
 
 此部分介紹用於收集訓練數據的「專家模型」。該模型採用基於物理規則的暴力演算法，利用直線運動方程式與鏡像反射原理計算球的精確落點，作為「正確答案」。
